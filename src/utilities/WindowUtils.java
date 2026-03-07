@@ -33,6 +33,6 @@ public class WindowUtils {
         float aspectRatio = (float) aspect_ratio.getWidth() / (float) aspect_ratio.getHeight();
         if ( aspectRatio < 0 || expected_dimension_value < 0 )
             throw new IllegalArgumentException("The aspect_ratio / screen desired_dimension cannot be negative!");
-        return desired_dimension == Measurements.WIDTH ? new Dimension(expected_dimension_value, (int) (expected_dimension_value / aspectRatio)) : new Dimension((int) (expected_dimension_value / aspectRatio), expected_dimension_value); //? we are using an integer because I haven't found any monitors with fractions of pixels yet r/whoosh
+        return desired_dimension == Measurements.WIDTH ? new Dimension(expected_dimension_value, (int) (expected_dimension_value / aspectRatio)) : new Dimension((int) (expected_dimension_value * aspectRatio), expected_dimension_value); //? we are using an integer because I haven't found any monitors with fractions of pixels yet r/whoosh
     }
 }
