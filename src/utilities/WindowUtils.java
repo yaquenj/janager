@@ -39,13 +39,17 @@ public class WindowUtils {
     }
 
     /**
-     * <p>A simple function that centers the window based on screen and window sizes.</p>
+     * <p>Centers the given frame using the provided screen and window sizes.</p>
      *
-     * @param
-     * @param frame The frame to be centered
+     * @param frame the frame to be centered {@link JFrame}
+     * @param screenSize the screen size {@link Dimension}
+     * @param windowSize the window size {@link Dimension}
      */
-    public static void centerWindow(JFrame frame, Dimension screenDimension, Dimension windowDimension) {
-        frame.setLocation((int)(screenDimension.getWidth() / 2 - windowDimension.getWidth() / 2), (int)(screenDimension.getHeight() / 2 - windowDimension.getHeight() / 2));
+    public static void centerWindow(JFrame frame, Dimension screenSize, Dimension windowSize) {
+        int centeredX = (int) ((screenSize.getWidth() - windowSize.getWidth()) / 2);
+        int centeredY = (int) ((screenSize.getHeight() - windowSize.getHeight()) / 2);
+
+        frame.setLocation(centeredX, centeredY);
     }
 
 }
