@@ -8,6 +8,8 @@ import java.awt.Toolkit;
 
 import enums.Measurements;
 
+import javax.swing.*;
+
 public class WindowUtils {
     /**
      * <p>It's just a function that returns the screen size Dimensions. A shortcut for me.</p>
@@ -35,4 +37,15 @@ public class WindowUtils {
             throw new IllegalArgumentException("The aspect_ratio / screen desired_dimension cannot be negative!");
         return desired_dimension == Measurements.WIDTH ? new Dimension(expected_dimension_value, (int) (expected_dimension_value / aspectRatio)) : new Dimension((int) (expected_dimension_value * aspectRatio), expected_dimension_value); //? we are using an integer because I haven't found any monitors with fractions of pixels yet r/whoosh
     }
+
+    /**
+     * <p>A simple function that centers the window based on screen and window sizes.</p>
+     *
+     * @param
+     * @param frame The frame to be centered
+     */
+    public static void centerWindow(JFrame frame, Dimension screenDimension, Dimension windowDimension) {
+        frame.setLocation((int)(screenDimension.getWidth() / 2 - windowDimension.getWidth() / 2), (int)(screenDimension.getHeight() / 2 - windowDimension.getHeight() / 2));
+    }
+
 }
