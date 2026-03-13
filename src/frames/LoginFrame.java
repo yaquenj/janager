@@ -152,7 +152,7 @@ public class LoginFrame extends JFrame {
         password_textfield.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (password_textfield.getText().equals("Password")) {
+                if (new String(password_textfield.getPassword()).equals("Password")) {
                     password_textfield.setText("");
                     password_textfield.setForeground(TailwindColors.SLATE_50);
                 }
