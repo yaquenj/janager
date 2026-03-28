@@ -3,8 +3,6 @@ package utilities;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javax.swing.JOptionPane;
-import javax.swing.JFrame;
 
 public class DatabaseInitializer {
     private static final String CREATE_USERS_TABLE_SQL = """
@@ -23,7 +21,7 @@ public class DatabaseInitializer {
             stmt.execute(CREATE_USERS_TABLE_SQL);
         } catch (SQLException e) {
             System.err.println("Failed to create users table (ref: janager.src.utilities.DatabaseInitializer): " + e.getMessage());
-            JOptionPane.showMessageDialog(new JFrame(), "Failed to create users table (ref: janager.src.utilities.DatabaseInitializer): " + e.getMessage(), "Database critical error!", JOptionPane.ERROR_MESSAGE);
+            DialogUtils.showErrorDialog("Database critical error!", "Failed to create users table (ref: janager.src.utilities.DatabaseInitializer): " + e.getMessage());
             System.exit(1);
         }
     }
