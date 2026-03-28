@@ -1,9 +1,8 @@
 package interfaces;
 
 public interface IUser {
-    boolean createUser();
-    boolean editUser();
+    int getId();
     String getLogin();
-    boolean checkPassword();
-    void setPassword();
+    String getPasswordHash();
+    String getSalt();
 }
