@@ -21,7 +21,7 @@ public class DatabaseInitializer {
             stmt.execute(CREATE_USERS_TABLE_SQL);
         } catch (SQLException e) {
             System.err.println("Failed to create users table (ref: janager.src.utilities.DatabaseInitializer): " + e.getMessage());
-            DialogUtils.showErrorDialog("Database critical error!", "Failed to create users table (ref: janager.src.utilities.DatabaseInitializer): " + e.getMessage());
+            DialogUtils.showErrorDialog("Database critical error!", "Failed to create users table (ref: janager.src.utilities.DatabaseInitializer.createUsersTable): " + e.getMessage());
             System.exit(1);
         }
     }
