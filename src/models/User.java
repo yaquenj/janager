@@ -14,6 +14,12 @@ public class User implements IUser {
         this.passwordHash = passwordHash;
         this.salt = salt;
     }
+    public User(String login, String passwordHash, String salt) {
+        this.id = -1;
+        this.login = login;
+        this.passwordHash = passwordHash;
+        this.salt = salt;
+    }
 
     @Override
     public int getId() {
