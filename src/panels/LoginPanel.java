@@ -10,7 +10,7 @@ import utilities.*;
 
 public class LoginPanel extends JPanel {
 
-    public LoginPanel(Dimension windowDimension, Runnable onSwitchToRegister) {
+    public LoginPanel(Dimension windowDimension, Runnable onSwitchToRegister, Runnable onLoginSuccess) {
         //? Responsive dimensions for components
         var fieldDimension = new Dimension((int) (windowDimension.width * 0.62), (int) (windowDimension.height * 0.07));
         var iconSize = fieldDimension.height;
@@ -23,7 +23,7 @@ public class LoginPanel extends JPanel {
         loginQuestion_label.setForeground(TailwindColors.SLATE_50);
         loginQuestion_label.setFont(loginQuestion_label.getFont().deriveFont((float) iconSize * 0.5f));
         loginQuestion_label.setAlignmentX(Component.CENTER_ALIGNMENT);
-        loginQuestion_label.setMaximumSize(loginQuestion_label.getPreferredSize());
+        loginQuestion_label.setMaximumSize(new Dimension(windowDimension.width, loginQuestion_label.getPreferredSize().height));
 
         JPanel credentialsPanel = new JPanel();
         credentialsPanel.setLayout(new BoxLayout(credentialsPanel, BoxLayout.Y_AXIS));
@@ -54,6 +54,9 @@ public class LoginPanel extends JPanel {
         passwordRow.setMaximumSize(passwordRow.getPreferredSize());
 
         JButton loginButton = new JButton();
+
+        username_textfield.addActionListener(_ -> loginButton.doClick());
+        password_textfield.addActionListener(_ -> loginButton.doClick());
         loginButton.setPreferredSize(new Dimension((int) (fieldDimension.width * 0.5), (int) (fieldDimension.height * 1.1)));
         loginButton.setText("Login");
         loginButton.setBackground(TailwindColors.SLATE_800);
@@ -69,7 +72,7 @@ public class LoginPanel extends JPanel {
                 password_textfield.setText(null); // security: remove the password from the memory
 
                 if (success) {
-                    DialogUtils.showInfoDialog("Login successful", "You have logged in!");
+                    onLoginSuccess.run();
                 } else {
                     DialogUtils.showInfoDialog("Login failed", "Wrong password!");
                 }
@@ -92,11 +95,12 @@ public class LoginPanel extends JPanel {
         JLabel register_label = new HyperlinkLabel("Don't have an account?", onSwitchToRegister);
         register_label.setFont(register_label.getFont().deriveFont((float) iconSize * 0.4f));
         register_label.setAlignmentX(Component.CENTER_ALIGNMENT);
-        register_label.setMaximumSize(register_label.getPreferredSize());
+        register_label.setMaximumSize(new Dimension(windowDimension.width, register_label.getPreferredSize().height));
 
         //? Set Layout for this panel
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(TailwindColors.SLATE_950);
+        setPreferredSize(windowDimension);
         setBorder(BorderFactory.createEmptyBorder(24, 24, 24, 24));
 
         add(Box.createVerticalGlue());

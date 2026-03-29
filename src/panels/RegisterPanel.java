@@ -26,7 +26,7 @@ public class RegisterPanel extends JPanel {
         registerQuestion_label.setForeground(TailwindColors.SLATE_50);
         registerQuestion_label.setFont(registerQuestion_label.getFont().deriveFont((float) iconSize * 0.5f));
         registerQuestion_label.setAlignmentX(Component.CENTER_ALIGNMENT);
-        registerQuestion_label.setMaximumSize(registerQuestion_label.getPreferredSize());
+        registerQuestion_label.setMaximumSize(new Dimension(windowDimension.width, registerQuestion_label.getPreferredSize().height));
 
         JPanel credentialsPanel = new JPanel();
         credentialsPanel.setLayout(new BoxLayout(credentialsPanel, BoxLayout.Y_AXIS));
@@ -68,6 +68,10 @@ public class RegisterPanel extends JPanel {
         confirmPasswordRow.setMaximumSize(confirmPasswordRow.getPreferredSize());
 
         JButton registerButton = new JButton();
+
+        username_textfield.addActionListener(_ -> registerButton.doClick());
+        password_textfield.addActionListener(_ -> registerButton.doClick());
+        confirm_password_textfield.addActionListener(_ -> registerButton.doClick());
         registerButton.setPreferredSize(new Dimension((int) (fieldDimension.width * 0.5), (int) (fieldDimension.height * 1.1)));
         registerButton.setText("Register");
         registerButton.setBackground(TailwindColors.SLATE_800);
@@ -115,11 +119,12 @@ public class RegisterPanel extends JPanel {
         JLabel login_label = new HyperlinkLabel("Already have an account? Login here", onSwitchToLogin);
         login_label.setFont(login_label.getFont().deriveFont((float) iconSize * 0.4f));
         login_label.setAlignmentX(Component.CENTER_ALIGNMENT);
-        login_label.setMaximumSize(login_label.getPreferredSize());
+        login_label.setMaximumSize(new Dimension(windowDimension.width, login_label.getPreferredSize().height));
 
         //? Set Layout for this panel
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(TailwindColors.SLATE_950);
+        setPreferredSize(windowDimension);
         setBorder(BorderFactory.createEmptyBorder(24, 24, 24, 24));
 
         add(Box.createVerticalGlue());
