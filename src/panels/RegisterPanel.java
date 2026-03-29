@@ -2,8 +2,6 @@ package panels;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
@@ -11,9 +9,7 @@ import java.util.Base64;
 
 import constants.TailwindColors;
 import models.User;
-import org.jetbrains.annotations.NotNull;
 import utilities.*;
-import enums.Measurements;
 
 public class RegisterPanel extends JPanel {
 
@@ -79,7 +75,7 @@ public class RegisterPanel extends JPanel {
         registerButton.setFont(registerButton.getFont().deriveFont((float) iconSize * 0.45f));
         registerButton.setBorder(BorderFactory.createLineBorder(TailwindColors.SLATE_700, 1, true));
         registerButton.setFocusPainted(false);
-        registerButton.addActionListener(e -> {
+        registerButton.addActionListener(_ -> {
 
             if (!Arrays.equals(password_textfield.getPassword(), confirm_password_textfield.getPassword())) {
                 DialogUtils.showWarningDialog("Couldn't register", "User was not registered - passwords don't match!");

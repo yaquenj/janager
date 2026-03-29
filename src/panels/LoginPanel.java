@@ -2,19 +2,15 @@ package panels;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
 import constants.TailwindColors;
-import org.jetbrains.annotations.NotNull;
 import utilities.*;
-import enums.Measurements;
 
 public class LoginPanel extends JPanel {
 
-    public LoginPanel(Dimension windowDimension, Runnable onSwitchToRegister) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public LoginPanel(Dimension windowDimension, Runnable onSwitchToRegister) {
         //? Responsive dimensions for components
         var fieldDimension = new Dimension((int) (windowDimension.width * 0.62), (int) (windowDimension.height * 0.07));
         var iconSize = fieldDimension.height;
@@ -65,7 +61,7 @@ public class LoginPanel extends JPanel {
         loginButton.setFont(loginButton.getFont().deriveFont((float) iconSize * 0.45f));
         loginButton.setBorder(BorderFactory.createLineBorder(TailwindColors.SLATE_700, 1, true));
         loginButton.setFocusPainted(false);
-        loginButton.addActionListener(e -> {
+        loginButton.addActionListener(_ -> {
             try {
 
                 boolean success = AuthUtils.loginUser(username_textfield.getText(), password_textfield.getPassword());
