@@ -1,4 +1,4 @@
-import frames.AuthFrame;
+import frames.MainFrame;
 import utilities.DatabaseInitializer;
 
 import java.security.NoSuchAlgorithmException;
@@ -9,7 +9,7 @@ public class Main {
 
         // First database initialization - does not overwrite it but creates a new one with necessary tables, if it doesn't exist
         DatabaseInitializer.init();
-        new AuthFrame();
+        new MainFrame();
 
     }
 }
