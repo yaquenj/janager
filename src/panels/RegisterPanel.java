@@ -4,14 +4,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
+import java.util.Base64;
 
 import constants.TailwindColors;
+import models.User;
 import org.jetbrains.annotations.NotNull;
-import utilities.HyperlinkLabel;
+import utilities.*;
 import enums.Measurements;
-import utilities.ImgIcon;
-import utilities.UIUtils;
-import utilities.WindowUtils;
 
 public class RegisterPanel extends JPanel {
 
@@ -77,7 +79,41 @@ public class RegisterPanel extends JPanel {
         registerButton.setFont(registerButton.getFont().deriveFont((float) iconSize * 0.45f));
         registerButton.setBorder(BorderFactory.createLineBorder(TailwindColors.SLATE_700, 1, true));
         registerButton.setFocusPainted(false);
-//        registerButton.setAction();
+        registerButton.addActionListener(e -> {
+
+            if (!Arrays.equals(password_textfield.getPassword(), confirm_password_textfield.getPassword())) {
+                DialogUtils.showWarningDialog("Couldn't register", "User was not registered - passwords don't match!");
+                return;
+            }
+
+            if (DbUserUtils.getUser(username_textfield.getText()) != null) {
+                DialogUtils.showWarningDialog("Couldn't register", "User was not registered - this username is already being used!");
+                return;
+            }
+
+            try {
+
+                var newSalt = AuthUtils.generateSalt();
+                var saltString = Base64.getEncoder().encodeToString(newSalt);
+
+                DbUserUtils.createUser(new User(
+                    username_textfield.getText(),
+                    AuthUtils.hashPassword(password_textfield.getPassword(), newSalt),
+                    saltString
+                ));
+
+                DialogUtils.showInfoDialog("User created", "The user was created successfully! Now please proceed to log in.");
+                onSwitchToLogin.run();
+
+            } catch (InvalidKeySpecException ex) {
+                System.err.println("Couldn't register due to InvalidKeySpecException error (ref: janager.src.panels.LoginPanel.loginButton): " + ex.getMessage());
+                DialogUtils.showErrorDialog("Register error", "Couldn't login due to InvalidKeySpecException error (ref: janager.src.panels.LoginPanel.loginButton): " + ex.getMessage());
+            } catch (NoSuchAlgorithmException ex) {
+                System.err.println("Couldn't register due to NoSuchAlgorithmException error (ref: janager.src.panels.LoginPanel.loginButton): " + ex.getMessage());
+                DialogUtils.showErrorDialog("Register error", "Couldn't login due to NoSuchAlgorithmException error (ref: janager.src.panels.LoginPanel.loginButton): " + ex.getMessage());
+            }
+
+        });
 
         JPanel buttonRow = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonRow.setOpaque(false);

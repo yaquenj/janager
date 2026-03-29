@@ -2,6 +2,8 @@ package frames;
 
 import javax.swing.*;
 import java.awt.*;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 import panels.LoginPanel;
 import panels.RegisterPanel;
@@ -12,7 +14,7 @@ public class AuthFrame extends JFrame {
     private final CardLayout cardLayout;
     private final JPanel mainContainer;
 
-    public AuthFrame() {
+    public AuthFrame() throws InvalidKeySpecException, NoSuchAlgorithmException {
         //? Variables
         var screenDimension = WindowUtils.getScreenSize();
         var windowDimension = WindowUtils.scaleDimensions(Measurements.HEIGHT, (int)(4 * screenDimension.getHeight() / 9), new Dimension(10, 16));
