@@ -4,9 +4,6 @@ import java.awt.*;
 
 public final class TailwindColors {
 
-    //? Prevent instantiation
-    private TailwindColors() {}
-
     //? Tailwind color pallets
     public static final Color SLATE_950 = new Color(2, 6, 24);
     public static final Color SLATE_900 = new Color(15, 23, 43);
