@@ -89,16 +89,4 @@ public class DbUserUtils {
             );
         }
     }
-
-    public static void updateUser(User oldUser, User newUser) {
-
-    }
-
-    public static void deleteUser(int userId) {
-
-    }
-
-    public static void deleteUser(String login) {
-
-    }
 }
