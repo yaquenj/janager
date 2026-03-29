@@ -89,14 +89,9 @@ public class RegisterPanel extends JPanel {
 
             try {
 
-                var newSalt = AuthUtils.generateSalt();
-                var saltString = Base64.getEncoder().encodeToString(newSalt);
+                AuthUtils.registerUser(username_textfield.getText(), password_textfield.getPassword());
 
-                DbUserUtils.createUser(new User(
-                    username_textfield.getText(),
-                    AuthUtils.hashPassword(password_textfield.getPassword(), newSalt),
-                    saltString
-                ));
+                password_textfield.setText(null); confirm_password_textfield.setText(null); // security: remove the password from the memory
 
                 DialogUtils.showInfoDialog("User created", "The user was created successfully! Now please proceed to log in.");
                 onSwitchToLogin.run();

@@ -5,6 +5,7 @@ import models.User;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
 import java.util.Base64;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -30,8 +31,13 @@ public class AuthUtils {
 
     public static String hashPassword(char[] password, byte[] salt) throws InvalidKeySpecException, NoSuchAlgorithmException {
         var spec = new PBEKeySpec(password, salt, 65536, 128);
-        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
-        return Base64.getEncoder().encodeToString(factory.generateSecret(spec).getEncoded());
+        try {
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+            return Base64.getEncoder().encodeToString(factory.generateSecret(spec).getEncoded());
+        } finally {
+            spec.clearPassword();
+            Arrays.fill(password, '\0');
+        }
     }
 
     public static boolean checkPassword(User user, char[] password) throws InvalidKeySpecException, NoSuchAlgorithmException {
@@ -40,8 +46,12 @@ public class AuthUtils {
             return false;
         }
 
-        byte[] saltBytes = Base64.getDecoder().decode(user.getSalt());
-        String computedHash = hashPassword(password, saltBytes);
-        return computedHash.equals(user.getPasswordHash());
+        try {
+            byte[] saltBytes = Base64.getDecoder().decode(user.getSalt());
+            String computedHash = hashPassword(password, saltBytes);
+            return computedHash.equals(user.getPasswordHash());
+        } finally {
+            Arrays.fill(password, '\0');
+        }
     }
 }

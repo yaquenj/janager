@@ -66,8 +66,12 @@ public class LoginPanel extends JPanel {
 
                 boolean success = AuthUtils.loginUser(username_textfield.getText(), password_textfield.getPassword());
 
+                password_textfield.setText(null); // security: remove the password from the memory
+
                 if (success) {
                     DialogUtils.showInfoDialog("Login successful", "You have logged in!");
+                } else {
+                    DialogUtils.showInfoDialog("Login failed", "Wrong password!");
                 }
 
             } catch (InvalidKeySpecException ex) {
