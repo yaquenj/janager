@@ -1,8 +1,8 @@
 package interfaces;
 
-public interface IPassword {
+public interface ICredential {
     int getOwnerId();
-    int getPasswordId();
+    int getCredentialId();
     String getUrl();
     String getLogin();
     String getEncryptedPassword();

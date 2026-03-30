@@ -1,6 +1,6 @@
 package utilities;
 
-import java.sql.*;
+import java.sql.SQLException;
 
 import models.User;
 
@@ -14,7 +14,6 @@ public class DbUserUtils {
     private static final String CREATE_USER_SQL = """
         INSERT OR IGNORE INTO users (login, passwordHash, salt) VALUES (?, ?, ?);
         """;
-
     public static User getUser(int userId) {
         try (var con = DatabaseConnection.connectDb();
              var stmt = con.prepareStatement(GET_USER_BY_ID_SQL)) {

@@ -1,24 +1,24 @@
 package models;
 
-import interfaces.IPassword;
+import interfaces.ICredential;
 
-public class Password implements IPassword {
+public class Credential implements ICredential {
     private final int ownerId;
-    private final int passwordId;
+    private final int credentialId;
     private final String url;
     private final String login;
     private final String encryptedPassword;
 
-    public Password(int ownerId, int passwordId, String url, String login, String encryptedPassword) {
+    public Credential(int ownerId, int passwordId, String url, String login, String encryptedPassword) {
         this.ownerId = ownerId;
-        this.passwordId = passwordId;
+        this.credentialId = passwordId;
         this.url = url;
         this.login = login;
         this.encryptedPassword = encryptedPassword;
     }
-    public Password(int ownerId, String url, String login, String encryptedPassword) {
+    public Credential(int ownerId, String url, String login, String encryptedPassword) {
         this.ownerId = ownerId;
-        this.passwordId = -1;
+        this.credentialId = -1;
         this.url = url;
         this.login = login;
         this.encryptedPassword = encryptedPassword;
@@ -30,8 +30,8 @@ public class Password implements IPassword {
     }
 
     @Override
-    public int getPasswordId() {
-        return passwordId;
+    public int getCredentialId() {
+        return credentialId;
     }
 
     @Override
