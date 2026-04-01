@@ -114,19 +114,19 @@ public class MainFrame extends JFrame {
         cardLayout.show(mainContainer, "list");
     }
 
-    private void showPasswordPanel(User user) {
-        if (currentPasswordPanel != null) mainContainer.remove(currentPasswordPanel);
+    private void showCredentialPanel(Credential credential) {
+        if (currentCredentialPanel != null) mainContainer.remove(currentCredentialPanel);
 
         mainContainer.setPreferredSize(listDimension);
         pack();
         WindowUtils.centerWindow(this, WindowUtils.getScreenSize());
 
-        currentPasswordPanel = new PasswordPanel(listDimension,
-            user.getLogin(), user.getSalt(), user.getPasswordHash(),
+        currentCredentialPanel = new CredentialPanel(listDimension,
+            credential.getUrl(), credential.getLogin(), credential.getEncryptedPassword(), masterPassword,
             () -> cardLayout.show(mainContainer, "list"),
             () -> showLoginPanel()
         );
-        mainContainer.add(currentPasswordPanel, "password");
+        mainContainer.add(currentCredentialPanel, "password");
         mainContainer.revalidate();
         mainContainer.repaint();
         cardLayout.show(mainContainer, "password");

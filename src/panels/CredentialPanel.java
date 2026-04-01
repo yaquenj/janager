@@ -6,9 +6,9 @@ import java.awt.*;
 import constants.TailwindColors;
 import utilities.*;
 
-public class PasswordPanel extends JPanel {
+public class CredentialPanel extends JPanel {
 
-    public PasswordPanel(Dimension windowDimension, String url, String username, String password, Runnable onBack, Runnable onLogout) {
+    public CredentialPanel(Dimension windowDimension, String url, String username, String encryptedPassword, char[] masterPassword, Runnable onBack, Runnable onLogout) {
         //? Responsive dimensions for components
         var fieldDimension = new Dimension((int) (windowDimension.width * 0.62), (int) (windowDimension.height * 0.07));
         var iconSize = fieldDimension.height;
@@ -24,7 +24,7 @@ public class PasswordPanel extends JPanel {
         logoutLabel.setFont(logoutLabel.getFont().deriveFont((float) iconSize * 0.4f));
         topRow.add(logoutLabel);
 
-        JLabel title_label = new JLabel("Password Details");
+        JLabel title_label = new JLabel("Credential Details");
         title_label.setForeground(TailwindColors.SLATE_50);
         title_label.setFont(title_label.getFont().deriveFont((float) iconSize * 0.5f));
         title_label.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -53,16 +53,37 @@ public class PasswordPanel extends JPanel {
         // Username Field
         JLabel userIcon_label = new JLabel();
         userIcon_label.setIcon((new ImgIcon("media/icons/iconsax-user-square.png").resizeIcon(iconSize)));
+
+        JPanel usernameFieldPanel = new JPanel(new BorderLayout(hGap / 2, 0));
+        usernameFieldPanel.setOpaque(false);
+        usernameFieldPanel.setPreferredSize(fieldDimension);
+        usernameFieldPanel.setMaximumSize(fieldDimension);
+
         JTextField username_textfield = UIUtils.createTextField(fieldDimension, "Username");
         username_textfield.setText(username);
         username_textfield.setEditable(false);
         username_textfield.setForeground(TailwindColors.SLATE_50);
 
+        JButton copyUserButton = new JButton("Copy");
+        copyUserButton.setPreferredSize(new Dimension((int) (fieldDimension.width * 0.25), fieldDimension.height));
+        copyUserButton.setBackground(TailwindColors.SLATE_800);
+        copyUserButton.setForeground(TailwindColors.SLATE_50);
+        copyUserButton.setFont(copyUserButton.getFont().deriveFont((float) iconSize * 0.35f));
+        copyUserButton.setBorder(BorderFactory.createLineBorder(TailwindColors.SLATE_700, 1, true));
+        copyUserButton.setFocusPainted(false);
+        copyUserButton.addActionListener(_ -> {
+            var selection = new StringSelection(username_textfield.getText());
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, selection);
+        });
+
+        usernameFieldPanel.add(username_textfield, BorderLayout.CENTER);
+        usernameFieldPanel.add(copyUserButton, BorderLayout.EAST);
+
         JPanel usernameRow = new JPanel(new FlowLayout(FlowLayout.LEFT, hGap, 0));
         usernameRow.setOpaque(false);
         usernameRow.setAlignmentX(Component.CENTER_ALIGNMENT);
         usernameRow.add(userIcon_label);
-        usernameRow.add(username_textfield);
+        usernameRow.add(usernameFieldPanel);
         usernameRow.setMaximumSize(usernameRow.getPreferredSize());
 
         // Password Field
@@ -75,13 +96,29 @@ public class PasswordPanel extends JPanel {
         passwordFieldPanel.setMaximumSize(fieldDimension);
 
         JPasswordField password_textfield = UIUtils.createPasswordField(fieldDimension, "Password");
-        password_textfield.setText(password);
+        String decryptedPassword = new String(new Encryption().decryptPassword(encryptedPassword.toCharArray(), masterPassword));
+        password_textfield.setText(decryptedPassword);
         password_textfield.setEditable(false);
         password_textfield.setForeground(TailwindColors.SLATE_50);
         password_textfield.setEchoChar('•'); // Hidden by default
 
+        JPanel passwordButtonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, hGap / 2, 0));
+        passwordButtonsPanel.setOpaque(false);
+
+        JButton copyPassButton = new JButton("Copy");
+        copyPassButton.setPreferredSize(new Dimension((int) (fieldDimension.width * 0.2), fieldDimension.height));
+        copyPassButton.setBackground(TailwindColors.SLATE_800);
+        copyPassButton.setForeground(TailwindColors.SLATE_50);
+        copyPassButton.setFont(copyPassButton.getFont().deriveFont((float) iconSize * 0.35f));
+        copyPassButton.setBorder(BorderFactory.createLineBorder(TailwindColors.SLATE_700, 1, true));
+        copyPassButton.setFocusPainted(false);
+        copyPassButton.addActionListener(_ -> {
+            var selection = new StringSelection(new String(password_textfield.getPassword()));
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, selection);
+        });
+
         JButton toggleButton = new JButton("Show");
-        toggleButton.setPreferredSize(new Dimension((int) (fieldDimension.width * 0.25), fieldDimension.height));
+        toggleButton.setPreferredSize(new Dimension((int) (fieldDimension.width * 0.2), fieldDimension.height));
         toggleButton.setBackground(TailwindColors.SLATE_800);
         toggleButton.setForeground(TailwindColors.SLATE_50);
         toggleButton.setFont(toggleButton.getFont().deriveFont((float) iconSize * 0.35f));
@@ -97,8 +134,11 @@ public class PasswordPanel extends JPanel {
             }
         });
 
+        passwordButtonsPanel.add(copyPassButton);
+        passwordButtonsPanel.add(toggleButton);
+
         passwordFieldPanel.add(password_textfield, BorderLayout.CENTER);
-        passwordFieldPanel.add(toggleButton, BorderLayout.EAST);
+        passwordFieldPanel.add(passwordButtonsPanel, BorderLayout.EAST);
 
         JPanel passwordRow = new JPanel(new FlowLayout(FlowLayout.LEFT, hGap, 0));
         passwordRow.setOpaque(false);
