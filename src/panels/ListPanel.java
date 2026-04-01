@@ -6,19 +6,21 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import constants.TailwindColors;
-import models.User;
+import models.Credential;
 import utilities.*;
 
 public class ListPanel extends JPanel {
 
-    public ListPanel(Dimension windowDimension, List<User> entries, 
-                     Consumer<User> onEntrySelected, Runnable onCreateRequest, 
-                     Consumer<User> onEditRequest, Consumer<User> onRemoveRequest, 
+    public ListPanel(Dimension windowDimension, int userId,
+                     Consumer<Credential> onEntrySelected, Runnable onCreateRequest,
+                     Consumer<Credential> onEditRequest, Consumer<Credential> onRemoveRequest,
                      Runnable onLogout) {
         //? Responsive dimensions for components
         var fieldDimension = new Dimension((int) (windowDimension.width * 0.7), (int) (windowDimension.height * 0.07));
         var iconSize = (int)(windowDimension.height * 0.07);
         var hGap = (int)(windowDimension.width * 0.02);
+
+        List<Credential> entries = DbCredentialUtils.getUserCredentialsById(userId);
 
         //? Window elements
         JPanel mainContent = new JPanel();
@@ -36,7 +38,7 @@ public class ListPanel extends JPanel {
         logoutLabel.setFont(logoutLabel.getFont().deriveFont((float) iconSize * 0.4f));
         topRow.add(logoutLabel);
 
-        JLabel title_label = new JLabel("Your Passwords:");
+        JLabel title_label = new JLabel("Your Credentials:");
         title_label.setForeground(TailwindColors.SLATE_50);
         title_label.setFont(title_label.getFont().deriveFont((float) iconSize * 0.6f));
         title_label.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -47,9 +49,9 @@ public class ListPanel extends JPanel {
         listContent.setOpaque(false);
         listContent.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        for (User entry : entries) {
-            String url = entry.getLogin();
-            String username = entry.getSalt();
+        for (Credential entry : entries) {
+            String url = entry.getUrl();
+            String username = entry.getLogin();
 
             JPanel entryRow = new JPanel();
             entryRow.setLayout(new BoxLayout(entryRow, BoxLayout.X_AXIS));

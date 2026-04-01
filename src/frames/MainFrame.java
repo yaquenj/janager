@@ -2,7 +2,6 @@ package frames;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 import panels.ListPanel;
 import panels.LoginPanel;
@@ -88,12 +87,10 @@ public class MainFrame extends JFrame {
     }
 
     private void showListPanel() {
-        //? Dummy entries for presentation
-        List<User> entries = List.of(
-            new User("https://github.com", "octopass123", "octocat"),
-            new User("https://google.com", "google-secret-456", "user@gmail.com"),
-            new User("https://jetbrains.com", "intellij-is-best-789", "developer")
-        );
+        if (loggedUser == null) {
+            showLoginPanel();
+            return;
+        }
 
         mainContainer.setPreferredSize(listDimension);
         pack();
@@ -101,11 +98,16 @@ public class MainFrame extends JFrame {
 
         if (currentListPanel != null) mainContainer.remove(currentListPanel);
 
-        currentListPanel = new ListPanel(listDimension, entries,
-            user -> showPasswordPanel(user),
-            () -> showCreatePasswordPanel(),
-            user -> showEditPasswordPanel(user),
-            user -> System.out.println("Remove requested for: " + user.getLogin()),
+        currentListPanel = new ListPanel(listDimension, loggedUser.getId(),
+            credential -> showCredentialPanel(credential),
+            () -> showCreateCredentialPanel(),
+            credential -> showEditCredentialPanel(credential),
+            credential -> {
+                if (DialogUtils.showConfirmDialog("Delete Credential", "Are you sure you want to delete this credential?")) {
+                    DbCredentialUtils.deleteCredential(credential.getCredentialId());
+                    showListPanel();
+                }
+            },
             () -> showLoginPanel()
         );
         mainContainer.add(currentListPanel, "list");
