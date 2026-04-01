@@ -17,7 +17,8 @@ public class DialogUtils {
         JOptionPane.showMessageDialog(new JFrame(), message, title, JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public static int showConfirmDialog(String title, String message) {
-        return JOptionPane.showConfirmDialog(new JFrame(), message, title, JOptionPane.YES_NO_OPTION);
+    public static boolean showConfirmDialog(String title, String message) {
+        int result = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
+        return result == JOptionPane.YES_OPTION;
     }
 }

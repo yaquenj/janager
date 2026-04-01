@@ -9,9 +9,9 @@ public class Credential implements ICredential {
     private final String login;
     private final String encryptedPassword;
 
-    public Credential(int ownerId, int passwordId, String url, String login, String encryptedPassword) {
+    public Credential(int credentialId, int ownerId, String url, String login, String encryptedPassword) {
+        this.credentialId = credentialId;
         this.ownerId = ownerId;
-        this.credentialId = passwordId;
         this.url = url;
         this.login = login;
         this.encryptedPassword = encryptedPassword;
