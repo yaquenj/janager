@@ -132,20 +132,20 @@ public class MainFrame extends JFrame {
         cardLayout.show(mainContainer, "password");
     }
 
-    private void showCreatePasswordPanel() {
-        if (currentManagePasswordPanel != null) mainContainer.remove(currentManagePasswordPanel);
+    private void showCreateCredentialPanel() {
+        if (currentManageCredentialPanel != null) mainContainer.remove(currentManageCredentialPanel);
 
         mainContainer.setPreferredSize(listDimension);
         pack();
         WindowUtils.centerWindow(this, WindowUtils.getScreenSize());
 
-        currentManagePasswordPanel = new ManagePasswordPanel(listDimension,
-            null, "Create Password", "Create",
-            user -> System.out.println("Create: " + user.getLogin()),
-            () -> cardLayout.show(mainContainer, "list"),
+        currentManageCredentialPanel = new ManageCredentialPanel(listDimension,
+            loggedUser.getId(), null, "Create Credential", "Create", masterPassword,
+            credential -> DbCredentialUtils.createCredential(credential),
+            () -> showListPanel(),
             () -> showLoginPanel()
         );
-        mainContainer.add(currentManagePasswordPanel, "manage");
+        mainContainer.add(currentManageCredentialPanel, "manage");
         mainContainer.revalidate();
         mainContainer.repaint();
         cardLayout.show(mainContainer, "manage");
@@ -162,6 +162,10 @@ public class MainFrame extends JFrame {
             user, "Edit Password", "Update",
             updatedUser -> System.out.println("Update: " + updatedUser.getLogin()),
             () -> cardLayout.show(mainContainer, "list"),
+        currentManageCredentialPanel = new ManageCredentialPanel(listDimension,
+            loggedUser.getId(), credential, "Edit Credential", "Update", masterPassword,
+            updatedCredential -> DbCredentialUtils.updateCredential(credential.getCredentialId(), updatedCredential),
+            () -> showListPanel(),
             () -> showLoginPanel()
         );
         mainContainer.add(currentManagePasswordPanel, "manage");

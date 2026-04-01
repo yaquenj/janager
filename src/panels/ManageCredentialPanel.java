@@ -7,12 +7,13 @@ import java.util.function.Consumer;
 import constants.TailwindColors;
 import models.User;
 import utilities.*;
+import utilities.Encryption;
 
 public class ManagePasswordPanel extends JPanel {
 
-    public ManagePasswordPanel(Dimension windowDimension, User entryToEdit, 
-                               String title, String actionButtonText,
-                               Consumer<User> onAction, Runnable onBack, Runnable onLogout) {
+    public ManageCredentialPanel(Dimension windowDimension, int ownerId, Credential entryToEdit,
+                                 String title, String actionButtonText, char[] masterPassword,
+                                 Consumer<Credential> onAction, Runnable onBack, Runnable onLogout) {
         //? Responsive dimensions for components
         var fieldDimension = new Dimension((int) (windowDimension.width * 0.62), (int) (windowDimension.height * 0.07));
         var iconSize = fieldDimension.height;
@@ -44,7 +45,7 @@ public class ManagePasswordPanel extends JPanel {
         urlIcon_label.setIcon(new ImgIcon("media/icons/iconsax-link.png").resizeIcon(iconSize));
         JTextField url_textfield = UIUtils.createTextField(fieldDimension, "URL");
         if (entryToEdit != null) {
-            url_textfield.setText(entryToEdit.getLogin());
+            url_textfield.setText(entryToEdit.getUrl());
             url_textfield.setForeground(TailwindColors.SLATE_50);
         }
 
@@ -60,7 +61,7 @@ public class ManagePasswordPanel extends JPanel {
         userIcon_label.setIcon((new ImgIcon("media/icons/iconsax-user-square.png").resizeIcon(iconSize)));
         JTextField username_textfield = UIUtils.createTextField(fieldDimension, "Username");
         if (entryToEdit != null) {
-            username_textfield.setText(entryToEdit.getSalt());
+            username_textfield.setText(entryToEdit.getLogin());
             username_textfield.setForeground(TailwindColors.SLATE_50);
         }
 
@@ -76,7 +77,8 @@ public class ManagePasswordPanel extends JPanel {
         keyIcon_label.setIcon(new ImgIcon("media/icons/iconsax-key-square.png").resizeIcon(iconSize));
         JPasswordField password_textfield = UIUtils.createPasswordField(fieldDimension, "Password");
         if (entryToEdit != null) {
-            password_textfield.setText(entryToEdit.getPasswordHash());
+            String decryptedPassword = new String(new Encryption().decryptPassword(entryToEdit.getEncryptedPassword().toCharArray(), masterPassword));
+            password_textfield.setText(decryptedPassword);
             password_textfield.setForeground(TailwindColors.SLATE_50);
             password_textfield.setEchoChar('•');
         }
@@ -97,9 +99,14 @@ public class ManagePasswordPanel extends JPanel {
         actionButton.setBorder(BorderFactory.createLineBorder(TailwindColors.SLATE_700, 1, true));
         actionButton.setFocusPainted(false);
         actionButton.addActionListener(_ -> {
-            int id = entryToEdit != null ? entryToEdit.getId() : -1;
-            User user = new User(id, url_textfield.getText(), new String(password_textfield.getPassword()), username_textfield.getText());
-            onAction.accept(user);
+            Credential credential;
+            String encryptedPassword = new String(new Encryption().encryptPassword(password_textfield.getPassword(), masterPassword));
+            if (entryToEdit != null) {
+                credential = new Credential(entryToEdit.getCredentialId(), ownerId, url_textfield.getText(), username_textfield.getText(), encryptedPassword);
+            } else {
+                credential = new Credential(ownerId, url_textfield.getText(), username_textfield.getText(), encryptedPassword);
+            }
+            onAction.accept(credential);
             onBack.run();
         });
 
