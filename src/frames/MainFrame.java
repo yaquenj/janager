@@ -3,13 +3,14 @@ package frames;
 import javax.swing.*;
 import java.awt.*;
 
+import models.Credential;
 import panels.ListPanel;
 import panels.LoginPanel;
-import panels.PasswordPanel;
+import panels.CredentialPanel;
 import panels.RegisterPanel;
-import panels.ManagePasswordPanel;
+import panels.ManageCredentialPanel;
 import models.User;
-import utilities.WindowUtils;
+import utilities.*;
 import enums.Measurements;
 
 public class MainFrame extends JFrame {
@@ -20,8 +21,8 @@ public class MainFrame extends JFrame {
     private User loggedUser;
     private char[] masterPassword;
     private ListPanel currentListPanel;
-    private PasswordPanel currentPasswordPanel;
-    private ManagePasswordPanel currentManagePasswordPanel;
+    private CredentialPanel currentCredentialPanel;
+    private ManageCredentialPanel currentManageCredentialPanel;
 
     public MainFrame() {
         //? Variables
@@ -153,24 +154,20 @@ public class MainFrame extends JFrame {
         cardLayout.show(mainContainer, "manage");
     }
 
-    private void showEditPasswordPanel(User user) {
-        if (currentManagePasswordPanel != null) mainContainer.remove(currentManagePasswordPanel);
+    private void showEditCredentialPanel(Credential credential) {
+        if (currentManageCredentialPanel != null) mainContainer.remove(currentManageCredentialPanel);
 
         mainContainer.setPreferredSize(listDimension);
         pack();
         WindowUtils.centerWindow(this, WindowUtils.getScreenSize());
 
-        currentManagePasswordPanel = new ManagePasswordPanel(listDimension,
-            user, "Edit Password", "Update",
-            updatedUser -> System.out.println("Update: " + updatedUser.getLogin()),
-            () -> cardLayout.show(mainContainer, "list"),
         currentManageCredentialPanel = new ManageCredentialPanel(listDimension,
             loggedUser.getId(), credential, "Edit Credential", "Update", masterPassword,
             updatedCredential -> DbCredentialUtils.updateCredential(credential.getCredentialId(), updatedCredential),
             () -> showListPanel(),
             () -> showLoginPanel()
         );
-        mainContainer.add(currentManagePasswordPanel, "manage");
+        mainContainer.add(currentManageCredentialPanel, "manage");
         mainContainer.revalidate();
         mainContainer.repaint();
         cardLayout.show(mainContainer, "manage");

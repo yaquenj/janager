@@ -2,6 +2,8 @@ package panels;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.Toolkit;
 
 import constants.TailwindColors;
 import utilities.*;

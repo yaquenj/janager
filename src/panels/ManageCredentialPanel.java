@@ -5,11 +5,11 @@ import java.awt.*;
 import java.util.function.Consumer;
 
 import constants.TailwindColors;
-import models.User;
+import models.Credential;
 import utilities.*;
 import utilities.Encryption;
 
-public class ManagePasswordPanel extends JPanel {
+public class ManageCredentialPanel extends JPanel {
 
     public ManageCredentialPanel(Dimension windowDimension, int ownerId, Credential entryToEdit,
                                  String title, String actionButtonText, char[] masterPassword,
