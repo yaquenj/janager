@@ -17,9 +17,10 @@ public class AuthUtils {
         DbUserUtils.createUser(user);
     }
 
-    public static boolean loginUser(String username, char[] password) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public static User loginUser(String username, char[] password) throws InvalidKeySpecException, NoSuchAlgorithmException {
         var user = DbUserUtils.getUser(username);
-        return checkPassword(user, password);
+        if (checkPassword(user, password)) return user;
+        return null;
     }
 
     public static byte[] generateSalt() {
@@ -49,7 +50,9 @@ public class AuthUtils {
         try {
             byte[] saltBytes = Base64.getDecoder().decode(user.getSalt());
             String computedHash = hashPassword(password, saltBytes);
-            return computedHash.equals(user.getPasswordHash());
+            boolean legit = computedHash.equals(user.getPasswordHash());
+            if (!legit) DialogUtils.showInfoDialog("Login failed", "Wrong password!");
+            return legit;
         } finally {
             Arrays.fill(password, '\0');
         }
