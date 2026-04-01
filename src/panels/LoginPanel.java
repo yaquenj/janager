@@ -5,12 +5,16 @@ import java.awt.*;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
+import java.util.function.BiConsumer;
+import java.util.Arrays;
+
 import constants.TailwindColors;
+import models.User;
 import utilities.*;
 
 public class LoginPanel extends JPanel {
 
-    public LoginPanel(Dimension windowDimension, Runnable onSwitchToRegister, Runnable onLoginSuccess) {
+    public LoginPanel(Dimension windowDimension, Runnable onSwitchToRegister, BiConsumer<User, char[]> onLoginSuccess) {
         //? Responsive dimensions for components
         var fieldDimension = new Dimension((int) (windowDimension.width * 0.62), (int) (windowDimension.height * 0.07));
         var iconSize = fieldDimension.height;
@@ -67,14 +71,17 @@ public class LoginPanel extends JPanel {
         loginButton.addActionListener(_ -> {
             try {
 
-                boolean success = AuthUtils.loginUser(username_textfield.getText(), password_textfield.getPassword());
+                char[] password = password_textfield.getPassword();
+                char[] passwordCopy = Arrays.copyOf(password, password.length);
+
+                User user = AuthUtils.loginUser(username_textfield.getText(), password);
 
                 password_textfield.setText(null); // security: remove the password from the memory
 
-                if (success) {
-                    onLoginSuccess.run();
+                if (user != null) {
+                    onLoginSuccess.accept(user, passwordCopy);
                 } else {
-                    DialogUtils.showInfoDialog("Login failed", "Wrong password!");
+                    Arrays.fill(passwordCopy, '\0');
                 }
 
             } catch (InvalidKeySpecException ex) {

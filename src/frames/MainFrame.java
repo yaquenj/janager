@@ -18,6 +18,8 @@ public class MainFrame extends JFrame {
     private final JPanel mainContainer;
     private final Dimension loginDimension;
     private final Dimension listDimension;
+    private User loggedUser;
+    private char[] masterPassword;
     private ListPanel currentListPanel;
     private PasswordPanel currentPasswordPanel;
     private ManagePasswordPanel currentManagePasswordPanel;
@@ -42,7 +44,11 @@ public class MainFrame extends JFrame {
 
         LoginPanel loginPanel = new LoginPanel(loginDimension,
             () -> showRegisterPanel(),
-            () -> showListPanel()
+            (user, password) -> {
+                this.loggedUser = user;
+                this.masterPassword = password;
+                showListPanel();
+            }
         );
         RegisterPanel registerPanel = new RegisterPanel(loginDimension, () -> showLoginPanel());
 
@@ -63,6 +69,11 @@ public class MainFrame extends JFrame {
     }
 
     private void showLoginPanel() {
+        this.loggedUser = null;
+        if (this.masterPassword != null) {
+            java.util.Arrays.fill(this.masterPassword, '\0');
+            this.masterPassword = null;
+        }
         mainContainer.setPreferredSize(loginDimension);
         pack();
         WindowUtils.centerWindow(this, WindowUtils.getScreenSize());

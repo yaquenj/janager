@@ -16,7 +16,7 @@ public class DatabaseInitializer {
     private static final String CREATE_CREDENTIALS_TABLE_SQL = """
         CREATE TABLE IF NOT EXISTS credentials (
             credentialId INTEGER PRIMARY KEY AUTOINCREMENT,
-            ownerId INTEGER NOT NULL UNIQUE,
+            ownerId INTEGER NOT NULL,
             url TEXT NOT NULL,
             login TEXT NOT NULL,
             encryptedPassword TEXT NOT NULL
